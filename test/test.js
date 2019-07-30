@@ -1,7 +1,6 @@
 const { expect } = require("chai");
 const InventoryAllocator = require("../src/solution");
 
-
 describe('InventoryAllocator', () => {
   beforeEach(() => {
     inventoryAllocator = new InventoryAllocator();

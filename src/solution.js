@@ -1,6 +1,6 @@
 // Inventory Allocator Class with relevant functions 
 class InventoryAllocator {
-  // Constructor includes object to store shipments and inventory distribution
+  // Constructor includes object to store shipments and an inventory distribution array 
   constructor(shipments = {}, distribution = []) {
     this.shipments = shipments; 
     this.distribution = distribution; 
@@ -48,6 +48,12 @@ class InventoryAllocator {
     if (!this.objectIsEmpty(shipments)) return []; 
     return ship;
   }
+  
+  // Adds a single item to the shipments when its empty 
+  addShipments(item, amount) {
+    this.shipments[item] = amount + this.shipments[item] || amount;
+    return this.shipments;
+  }
 
   // Helper function to check if object is empty 
   objectIsEmpty(obj) { 
@@ -55,12 +61,6 @@ class InventoryAllocator {
       if(obj.hasOwnProperty(key)) return false;
     }
     return true;
-  }
-
-  // Adds a single item to the shipments when its empty 
-  addShipments(item, amount) {
-    this.shipments[item] = amount + this.shipments[item] || amount;
-    return this.shipments;
   }
 }
 
