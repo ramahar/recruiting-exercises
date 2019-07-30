@@ -14,7 +14,7 @@ describe('InventoryAllocator', () => {
   });
 
   describe("#addShipments", () => {
-    it("Should add single item to shipments when its empty", () => {
+    it("Should add a single item to shipments when its empty", () => {
       const item = { apple: 5 };
       inventoryAllocator.addShipments("apple", item.apple);
       expect(inventoryAllocator.shipments).to.deep.equal(item);
@@ -32,7 +32,7 @@ describe('InventoryAllocator', () => {
   });
 
   describe('#cheapestShipment', () => {
-    it('Should return empty array [] if there is no shipments or no inventory distribution', () => {
+    it('Should return [] if there are no shipments', () => {
       const newInventoryDist = [{ name: 'owd', inventory: { apple: 0 } }];
       inventoryAllocator.shipments = [];
       inventoryAllocator.inventoryDist = newInventoryDist;
@@ -44,7 +44,7 @@ describe('InventoryAllocator', () => {
       expect(inventoryAllocator.cheapestShipment()).to.be.empty;
     });
 
-    it("Should return empty array [] for insufficient inventories", () => {
+    it("Should return [] for insufficient inventory", () => {
       const newOrder = { apples: 1 };
       const inventoryDist = [{ name: "owd", inventory: { apples: 0 } }];
       inventoryAllocator.inventoryDist = inventoryDist;
@@ -52,7 +52,7 @@ describe('InventoryAllocator', () => {
       expect(inventoryAllocator.cheapestShipment()).to.deep.equal([]);
     });
 
-    it("Should allocate single shipment properly", () => {
+    it("Should allocate single shipment correctly", () => {
       const newOrder = { apples: 1 };
       const inventoryDist = [
         { name: "owd", inventory: { apples: 5, oranges: 10 } },
@@ -64,7 +64,7 @@ describe('InventoryAllocator', () => {
       expect(inventoryAllocator.cheapestShipment()).to.deep.equal(solution);
     });
       
-    it("Should return the exact shipment match if the inventory distribution has the exact order", () => {
+    it("Should return the shipment if the order matches the shipment", () => {
       const newOrder = { carrot: 1 };
       const newInventoryDist = [{ name: "owd", inventory: { carrot: 1 }}];
       inventoryAllocator.inventoryDist = newInventoryDist;
@@ -72,7 +72,7 @@ describe('InventoryAllocator', () => {
       expect(inventoryAllocator.cheapestShipment()).to.eql([{ owd: { carrot: 1 } }]);
     });
 
-    it("Should return the exact shipment when there is an excess amount in the inventory distribution", () => {
+    it("Should return the exact shipment when there is extra inventory", () => {
       let newOrder = { strawberry: 10, blueberry: 15 };
       let newInventoryDist = [
         { name: "dm", inventory: { strawberry: 25, blueberry: 30 } }
@@ -82,7 +82,7 @@ describe('InventoryAllocator', () => {
       expect(inventoryAllocator.cheapestShipment()).to.eql([{ dm: { strawberry: 10, blueberry: 15 } }]);
     });
 
-    it('Should allocate multiple split inventories properly', () => {
+    it('Should allocate multiple inventories properly', () => {
       const newOrder = { apples: 3, blueberry: 2 };
       const newInventoryDist = [{ name: 'cal', inventory: { apples: 1, blueberry: 1 } },
         { name: 'TX', inventory: { apples: 1 } },
