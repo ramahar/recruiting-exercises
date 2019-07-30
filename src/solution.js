@@ -27,38 +27,41 @@ class InventoryAllocator {
     }
     return result;
   }
+  
   // Function to find the cheapest shipment 
   cheapestShipment() {
-    let { shipments, distribution } = this;
-    if (!distribution.length) return []; 
-    // Create a copy object of shipments to retain original shipments
+    let { shipments, inventoryDist } = this;
+    if (!inventoryDist.length) return []; 
+    // Create copy of shipments to retain original shipment
     shipments = Object.assign({}, shipments);
-    let result = [];
+    let ship = [];
 
 
-    for (let warehouse of distribution) {
+    for (let warehouse of inventoryDist) {
+      // Check if any items from the order exist in the warehouse 
       let items = this.handleShipment(warehouse, shipments);
-      // Check if items exist in the warehouse 
-      if (items) result.push({ [warehouse.name]: items }); // to make sure some items exist in this warehouse;
-      if (this.objectIsEmpty(shipments)) return result; // to check if order(shipments) is empty like {}
+      if (items) ship.push({ [warehouse.name]: items }); 
+      // Conditional to check if shipments object is empty 
+      if (this.objectIsEmpty(shipments)) return ship; 
     }
 
-    if (!this.objectIsEmpty(shipments)) return []; // again check if order(shipments) is empty to make sure all shipments is fullfilled 
-    return result;
+    if (!this.objectIsEmpty(shipments)) return []; 
+    return ship;
   }
 
-  // Helper method to check if object is empty
+  // Helper function to check if object is empty 
   objectIsEmpty(obj) { 
-    for (let key in obj) {
-      return false;
+    for (var key in obj) {
+      if(obj.hasOwnProperty(key)) return false;
     }
     return true;
   }
 
-  // Function to add a single shipment to order 
+  // Adds a single item to the shipments when its empty 
   addShipments(item, amount) {
     this.shipments[item] = amount + this.shipments[item] || amount;
     return this.shipments;
   }
 }
+
 module.exports = InventoryAllocator;
