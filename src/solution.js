@@ -31,15 +31,15 @@ class InventoryAllocator {
   cheapestShipment() {
     let { shipments, distribution } = this;
     if (!distribution.length) return []; 
-    shipments = Object.assign({}, shipments);// copy shipments so orginal shipments won't get modified;
+    // Create a copy object of shipments to retain original shipments
+    shipments = Object.assign({}, shipments);
     let result = [];
 
 
     for (let warehouse of distribution) {
-      // call handleShipment to check if any of items inside the order exist in the warehouse;
-      // it return either the items that exist in the warehouse with modifing the order(shipments) or it return undefined;
-      let res = this.handleShipment(warehouse, shipments);
-      if (res) result.push({ [warehouse.name]: res }); // to make sure some items exist in this warehouse;
+      let items = this.handleShipment(warehouse, shipments);
+      // Check if items exist in the warehouse 
+      if (items) result.push({ [warehouse.name]: items }); // to make sure some items exist in this warehouse;
       if (this.objectIsEmpty(shipments)) return result; // to check if order(shipments) is empty like {}
     }
 
